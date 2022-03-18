@@ -1,30 +1,32 @@
-package model;
+package br.com.restwithspringboot.data.vo;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name="person")
-public class Person implements Serializable {
+//@JsonPropertyOrder({"id", "address", "first_name", "last_name", "gender"}) // Altera a ordem de apresentação no json
+public class PersonVO implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+
     private Long id;
-    @Column(name = "first_name", nullable = false, length = 80)
+
+    @JsonProperty("first_name")  // Altera o nome do campo no arquivo JSON
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 80)
+    @JsonProperty("last_name")
     private String lastName;
 
-    @Column(nullable = false, length = 100)
     private String address;
 
-    @Column(nullable = false, length = 6)
+    //@JsonIgnore // Ignora o atributo no Json
     private String gender;
 
-
-    public Person() {
+    public PersonVO() {
     }
 
     public Long getId() {
@@ -71,8 +73,8 @@ public class Person implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(id, person.id) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && Objects.equals(gender, person.gender);
+        PersonVO personVO = (PersonVO) o;
+        return Objects.equals(id, personVO.id) && Objects.equals(firstName, personVO.firstName) && Objects.equals(lastName, personVO.lastName) && Objects.equals(address, personVO.address) && Objects.equals(gender, personVO.gender);
     }
 
     @Override

@@ -1,41 +1,51 @@
 package br.com.restwithspringboot;
 
-import model.Person;
-import org.springframework.http.MediaType;
+import br.com.restwithspringboot.data.model.Person;
+import br.com.restwithspringboot.data.vo.PersonVO;
+import br.com.restwithspringboot.data.vo.PersonVOV2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import services.PersonServices;
+import br.com.restwithspringboot.services.PersonServices;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("api/person/v1")
 public class PersonController {
 
-    PersonServices services = new PersonServices();
+    @Autowired
+    PersonServices service;
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> findAll() {
-        return services.findAll();
+    @GetMapping(produces = { "application/json", "application/xml" })
+    public List<PersonVO> findAll() {
+        return service.findAll();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable("id") Long id) {
-        return null;
+    @GetMapping(value = "/{id}", produces = { "application/json", "application/xml" })
+    public PersonVO findById(@PathVariable("id") Long id) {
+        return service.findById(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Person create(@RequestBody Person person) {
-        return services.create(person);
+    @PostMapping(produces = { "application/json", "application/xml" }, consumes = { "application/json", "application/xml" })
+    public PersonVO create(@RequestBody PersonVO person) {
+        return service.create(person);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Person update(@RequestBody Person person) {
-        return services.create(person);
+    @PostMapping("/v2")
+    public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
+        return service.createV2(person);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") Long id) {
-        services.delete(id);
+    @PutMapping(produces = { "application/json", "application/xml" }, consumes = { "application/json", "application/xml" })
+    public PersonVO update(@RequestBody PersonVO person) {
+        return service.create(person);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        service.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 }

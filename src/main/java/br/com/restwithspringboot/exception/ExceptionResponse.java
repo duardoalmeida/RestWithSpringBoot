@@ -1,4 +1,4 @@
-package exception;
+package br.com.restwithspringboot.exception;
 
 import java.io.Serializable;
 import java.util.Date;
